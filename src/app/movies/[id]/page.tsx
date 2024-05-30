@@ -1,7 +1,11 @@
 import { useRouter } from 'next/router';
 import { getMovieDetails, getSimilarMovies } from '../../../../Utils/request';
 
-async function MovieDetailsPage({ params }) {
+interface Params {
+    id: string;
+}
+
+async function MovieDetailsPage({ params }: { params: Params }) {
     const IMAGE_BASE_URL = "https://www.themoviedb.org/t/p/w220_and_h330_face";
     const movieDetails = await getMovieDetails(params.id);
     const similarMovies = await getSimilarMovies(params.id);
@@ -27,7 +31,7 @@ async function MovieDetailsPage({ params }) {
                         )}
                     </div>
                     <div className="mb-4">
-                        {movieDetails.genres.map(genre => (
+                        {movieDetails.genres.map((genre: { id: number; name: string }) => (
                             <span className="mx-1 p-1 bg-gray-800 text-white rounded" key={genre.id}>{genre.name}</span>
                         ))}
                     </div>
@@ -39,7 +43,7 @@ async function MovieDetailsPage({ params }) {
             <div className="mt-8">
                 <h2 className="text-2xl font-semibold mb-4">Similar Movies</h2>
                 <div className="flex flex-wrap gap-4">
-                    {similarMovies.map(movie => (
+                    {similarMovies.map((movie: { id: number; poster_path: string; title: string }) => (
                         <div className="w-1/4" key={movie.id}>
                             <img src={IMAGE_BASE_URL + movie.poster_path} alt={movie.title} className="rounded-lg" />
                             <div className="mt-2">
